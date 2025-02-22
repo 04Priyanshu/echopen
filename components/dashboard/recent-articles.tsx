@@ -1,9 +1,11 @@
-import React from 'react'
+"use client"
+import React, { useTransition } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import Link from 'next/link'
 import { Prisma } from '@prisma/client'
+import { deleteArticle } from '@/actions/delete-article'
 
 type RecentArticlesProps = {
   articles: Prisma.ArticleGetPayload<{
@@ -66,7 +68,7 @@ const RecentArticles: React.FC<RecentArticlesProps> = ({ articles }) => {
                         <Link href={`/dashboard/articles/${articles.id}/edit`}>
                           <Button variant="ghost" size="sm">Edit</Button>
                         </Link>
-                        <DeleteButton />
+                        <DeleteButton articleId={articles.id} />
                       </div>
                     </TableCell>
                   </TableRow>
@@ -86,11 +88,23 @@ const RecentArticles: React.FC<RecentArticlesProps> = ({ articles }) => {
 
 export default RecentArticles;
 
+type DeleteButtonProps = {
+  articleId: string
+}
 
-const DeleteButton = () => {
+
+const DeleteButton : React.FC<DeleteButtonProps> = ({articleId}) => {
+  const [isPending, startTransition]=useTransition();
   return (
-    <form action="">
-      <Button variant={"ghost"} size="sm" type="submit">Delete</Button>
+    <form action={()=>{
+      // delete article
+      startTransition(async() => {
+        await deleteArticle(articleId);
+      })
+    }}>
+      <Button disabled={isPending} variant={"ghost"} size="sm" type="submit">
+        {isPending ? 'Deleting...' : 'Delete'}
+      </Button>
     </form>
   )
 }
