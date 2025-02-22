@@ -4,12 +4,16 @@ import TopArticles from "@/components/ui/home/top-articles";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import BlogFooter from "@/components/ui/home/blog-footer";
+import React from "react";
+
 
 export default function Home() {
   return (
     <main>
       <Navbar />
+      
       <HeroSection />
+      
       <section className="relative py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center flex flex-col items-center mb-8 md:mb-12">
