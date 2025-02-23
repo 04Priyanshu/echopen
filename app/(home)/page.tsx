@@ -1,10 +1,10 @@
-import HeroSection from "@/components/ui/home/hero-section";
-import Navbar from "@/components/ui/home/header/Navbar";
-import TopArticles from "@/components/ui/home/top-articles";
+import HeroSection from "@/components/home/hero-section";
+import Navbar from "@/components/home/header/Navbar";
+import TopArticles from "@/components/home/top-articles";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import BlogFooter from "@/components/ui/home/blog-footer";
-import React from "react";
+import BlogFooter from "@/components/home/blog-footer";
+import React, { Suspense } from "react";
 import AnimateWrapper from "../animateWrapper";
 
 
@@ -34,9 +34,13 @@ export default function Home() {
             </div>
           </AnimateWrapper>
 
+          <Suspense fallback={<div>Loading...</div>}>
           <AnimateWrapper>
             <TopArticles />
           </AnimateWrapper>
+          </Suspense>
+
+          
 
           <AnimateWrapper>
             <div className="flex justify-center mt-12">

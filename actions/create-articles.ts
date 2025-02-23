@@ -1,4 +1,5 @@
 "use server"
+
 import { auth } from '@clerk/nextjs/server'
 import {z} from 'zod'
 import {v2 as cloudinary , UploadApiResponse} from 'cloudinary'
@@ -43,6 +44,7 @@ export const createArticle = async(prevState : CreateArticlesFormstate,formData 
     }
 
     const {userId} = await auth();
+
     if(!userId){
         return {
             errors: {
@@ -76,7 +78,7 @@ export const createArticle = async(prevState : CreateArticlesFormstate,formData 
     }
 
     const arrayBuffer = await imageFile.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const buffer = Buffer.from(arrayBuffer);//converting in binary data
 
     const uploadResponse : UploadApiResponse | undefined = await new Promise((resolve,reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(

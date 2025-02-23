@@ -1,12 +1,12 @@
 "use client";
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { Button } from '../../button'
+import { Button } from '../../ui/button'
 import SearchInput from './search-input'
 import ToggleMode from './toggle-mode'
 import { Menu, Search, X } from 'lucide-react';
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
-import { Input } from '../../input';
+import { Input } from '../../ui/input';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Button } from "../button";
+import { Button } from "../ui/button";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 

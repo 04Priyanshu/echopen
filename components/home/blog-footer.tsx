@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button } from '../button'
+import { Button } from '../ui/button'
 import { Github, Linkedin, Mail, Twitter } from 'lucide-react'
-import { Input } from '../input'
+import { Input } from '../ui/input'
 
 function BlogFooter() {
   return (

@@ -1,26 +1,26 @@
-"use client"
-import React, { useTransition } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
-import { Button } from '../ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import Link from 'next/link'
-import { Prisma } from '@prisma/client'
-import { deleteArticle } from '@/actions/delete-article'
+"use client";
+import React, { useTransition } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
+import Link from 'next/link';
+import { Prisma } from '@prisma/client';
+import { deleteArticle } from '@/actions/delete-article';
 
 type RecentArticlesProps = {
   articles: Prisma.ArticleGetPayload<{
     include: {
-      comments: true
+      comments: true;
       author: {
         select: {
-          name: true
-          email: true
-          imageUrl: true
-        }
-      }
-    }
-  }>[],
-}
+          name: true;
+          email: true;
+          imageUrl: true;
+        };
+      };
+    };
+  }>[];
+};
 
 const RecentArticles: React.FC<RecentArticlesProps> = ({ articles }) => {
   return (
@@ -33,14 +33,12 @@ const RecentArticles: React.FC<RecentArticlesProps> = ({ articles }) => {
           </Button>
         </div>
       </CardHeader>
-      {
-        !articles.length ? (
-          <CardContent>
-            <div className="text-center text-muted-foreground">
-              No articles found
-            </div>
-          </CardContent>
-        ) : (<CardContent>
+      {!articles.length ? (
+        <CardContent>
+          <div className="text-center text-muted-foreground">No articles found</div>
+        </CardContent>
+      ) : (
+        <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
@@ -52,59 +50,54 @@ const RecentArticles: React.FC<RecentArticlesProps> = ({ articles }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {
-                articles.map((articles) => (
-                  <TableRow key={articles.id}>
-                    <TableCell className="font-medium">{articles.title}</TableCell>
-                    <TableCell>
-                      <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                        Published
-                      </span>
-                    </TableCell>
-                    <TableCell>{articles.comments.length}</TableCell>
-                    <TableCell>{articles.createdAt.toDateString()}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Link href={`/dashboard/articles/${articles.id}/edit`}>
-                          <Button variant="ghost" size="sm">Edit</Button>
-                        </Link>
-                        <DeleteButton articleId={articles.id} />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              }
-
-
+              {articles.map((article) => (
+                <TableRow key={article.id}>
+                  <TableCell className="font-medium">{article.title}</TableCell>
+                  <TableCell>
+                    <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                      Published
+                    </span>
+                  </TableCell>
+                  <TableCell>{article.comments.length}</TableCell>
+                  <TableCell>{new Date(article.createdAt).toDateString()}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Link href={`/dashboard/articles/${article.id}/edit`}>
+                        <Button variant="ghost" size="sm">Edit</Button>
+                      </Link>
+                      <DeleteButton articleId={article.id} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
-        </CardContent>)
-      }
-
-
+        </CardContent>
+      )}
     </Card>
-  )
-}
+  );
+};
 
 export default RecentArticles;
 
 type DeleteButtonProps = {
-  articleId: string
-}
+  articleId: string;
+};
 
-
-const DeleteButton : React.FC<DeleteButtonProps> = ({articleId}) => {
-  const [isPending, startTransition]=useTransition();
+const DeleteButton: React.FC<DeleteButtonProps> = ({ articleId }) => {
+  const [isPending, startTransition] = useTransition();
   return (
-    <form action={()=>{
-      // delete article
-      startTransition(async() => {
-        await deleteArticle(articleId);
-      })
-    }}>
-      <Button disabled={isPending} variant={"ghost"} size="sm" type="submit">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        startTransition(async () => {
+          await deleteArticle(articleId);
+        });
+      }}
+    >
+      <Button disabled={isPending} variant="ghost" size="sm" type="submit">
         {isPending ? 'Deleting...' : 'Delete'}
       </Button>
     </form>
-  )
-}
+  );
+};
