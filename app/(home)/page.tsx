@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import BlogFooter from "@/components/home/blog-footer";
 import React, { Suspense } from "react";
 import AnimateWrapper from "../animateWrapper";
+import { AllArticlesPageSkeleton } from "../articles/page";
 
 
 export default function Home() {
@@ -34,7 +35,7 @@ export default function Home() {
             </div>
           </AnimateWrapper>
 
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<AllArticlesPageSkeleton />}>
           <AnimateWrapper>
             <TopArticles />
           </AnimateWrapper>

@@ -2,43 +2,92 @@ import React from 'react'
 import { Card } from '../ui/card'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { Search } from 'lucide-react'
+import { Prisma } from '@prisma/client'
 
-function AllArticlesPage() {
+type SearchPageProps = {
+    articles: Prisma.ArticleGetPayload<{
+      include:{
+        author:{
+          select:{
+            name:true,
+            email:true,
+            imageUrl:true
+          }
+        }
+      }
+    }>[];
+  };
+
+const AllArticlesPage : React.FC<SearchPageProps> = async({articles}) => {
+
+
+    if (articles.length === 0) return <NoSearchResults />;
+
+
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {/* Article Card */}
 
-            <Card className="group relative overflow-hidden transition-all hover:shadow-lg">
+            {
+                articles.map((article)=>(
+                    <Card key={article.id} className="group relative overflow-hidden transition-all hover:shadow-lg">
                 <div className="p-6">
 
                     <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl">
                         <Image
-                            src="https://plus.unsplash.com/premium_photo-1713980018128-3d6cfbe63d0e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MXxEby1oZjRFdjQ0TXx8ZW58MHx8fHx8"
+                            src={article.featuredImage}
                             alt="Article Image"
                             className="object-cover"
                             fill
                         />
                     </div>
                     <h3 className="text-xl font-semibold text-foreground">
-                         Title
+                         {article.title}
                     </h3>
-                    <p className="mt-2 text-muted-foreground">web dev</p>
+                    <p className="mt-2 text-muted-foreground text-sm">{article.category}</p>
                     <div className="mt-6 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <Avatar>
-                                <AvatarImage/>
+                                <AvatarImage src={article.author.imageUrl || ""}/>
                                 <AvatarFallback>CN</AvatarFallback>    
                             </Avatar>
-                            <span className="text-sm text-muted-foreground">Author</span>
+                            <span className="text-sm text-muted-foreground">{article.author.name}</span>
                         </div>
-                        <div className="text-sm text-muted-foreground">12 feb</div>
+                        <div className="text-sm text-muted-foreground">{article.createdAt.toDateString()}</div>
                     </div>
                 </div>
 
             </Card>
+                ))
+            }
+
+            
 
         </div>
     )
 }
 
 export default AllArticlesPage
+
+export function NoSearchResults() {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center">
+        {/* Icon */}
+        <div className="mb-4 rounded-full bg-muted p-4">
+          <Search className="h-8 w-8 text-muted-foreground" />
+        </div>
+  
+        {/* Title */}
+        <h3 className="text-xl font-semibold text-foreground">
+          No Results Found
+        </h3>
+  
+        {/* Description */}
+        <p className="mt-2 text-muted-foreground">
+          We could not find any articles matching your search. Try a different
+          keyword or phrase.
+        </p>
+      </div>
+    );
+  }
