@@ -1,12 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
  
   const user = await currentUser();
   if (!user) {
-    return null;
+    return <h1>youu must login first.Redirecting....
+  {redirect("/login")}
+    </h1>;
   }
   const loggedInUser = await prisma.user.findUnique({
     where: { clerkUserId: user.id },
