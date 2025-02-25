@@ -8,7 +8,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await currentUser();
   if (!user) {
     return <h1>youu must login first.Redirecting....
-  {redirect("/login")}
+  {redirect("/signup")}
     </h1>;
   }
   const loggedInUser = await prisma.user.findUnique({

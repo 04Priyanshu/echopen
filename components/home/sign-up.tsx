@@ -1,10 +1,11 @@
 "use client";
 import React from 'react';
-import { SignIn } from '@clerk/nextjs';
+import { SignUp } from '@clerk/nextjs';
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { redirect } from 'next/navigation';
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <div className="flex items-center justify-center min-h-screen overflow-hidden bg-black before:absolute before:left-1/4 before:top-0 before:h-[500px] before:w-[500px] before:rounded-full before:bg-gradient-to-r before:from-violet-600/20 before:to-indigo-600/20 before:blur-3xl">
       <motion.div 
@@ -17,10 +18,12 @@ export default function LoginPage() {
                   Echo
                 </span> <span>Pen</span></h1>
           <CardContent>
-            <SignIn routing="hash" />
+            <SignUp routing="hash" />
           </CardContent>
         </Card>
       </motion.div>
+      {redirect("/login")}
     </div>
+    
   );
 }
